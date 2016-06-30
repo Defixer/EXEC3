@@ -1,0 +1,114 @@
+package com.exec.runtime;
+
+import com.exec.model.Horses;
+import com.exec.model.Horses;
+
+import java.util.Scanner;
+
+import java.util.List;
+import java.util.ArrayList;
+
+import java.util.concurrent.CyclicBarrier;
+
+public class GateMain{		
+	static List<String> threadNames = new ArrayList<String>();
+	static List<String> horseNames = new ArrayList<String>();
+	static List<String> warCry = new ArrayList<String>();
+	
+	public static void main(String[] args) {
+		
+		int horseCount = 0;
+		
+		Scanner scan = new Scanner(System.in);
+		
+		System.out.print("\nEnter number of horses: ");
+		horseCount = scan.nextInt();
+		System.out.println();
+		
+		List<Thread> RG = new ArrayList<Thread>();
+                
+		final CyclicBarrier cb = new CyclicBarrier(horseCount,new Runnable(){
+			public void run(){
+				System.out.println("\n\t    ALL HORSES REACHED BARRIER\n======================================================\n");
+			}
+		});
+	
+		for(int horseCtr = 0; horseCtr < horseCount; horseCtr++){
+			Horses rg = new Horses(cb,getHorseNames(horseCtr));			
+         Thread thread = new Thread(rg);
+			thread.start();
+		
+			RG.add(thread);
+		}
+	
+		for(Thread thread: RG){
+			try{
+				thread.join();
+			}
+			catch(InterruptedException ie){
+				System.out.println("Thread Interrupted");
+			}			
+		}
+		
+		System.out.println("ALL HORSES REACHED THE FINISHED LINE\n");
+		
+		int rank = 1;
+		for(String horseRank: threadNames){				
+			System.out.println(horseRank + "\t\trank "+ rank);
+			rank++;
+		}		
+	}
+	
+	synchronized public static void done(){		
+		boolean isNotHorseName = true;
+		int threadCtr = 0;
+		String threadName = "";
+		
+		while(isNotHorseName){
+			threadName = "Thread-" + threadCtr;
+			if(Thread.currentThread().getName().equalsIgnoreCase(threadName)){
+				threadNames.add(getHorseNames(threadCtr));
+				break;
+			}
+			threadCtr++;
+		}	
+	}	
+	
+	public static String getHorseNames(int horseCtr){
+        
+
+        horseNames.add("Red Bullet");	horseNames.add("Green Fury");		horseNames.add("Pink Mirage");
+        horseNames.add("Blue Dash");	horseNames.add("Yellow Burst");	horseNames.add("White Diamond");
+        horseNames.add("Black Mamba"); horseNames.add("Orange Poncan");	horseNames.add("Coral Buster");
+        horseNames.add("Gray Star");	horseNames.add("Indigo Indian");	horseNames.add("Violet Guard");
+        horseNames.add("Ash Smoke");	horseNames.add("Flesh Breeze"); 	horseNames.add("Maroon Sphere");
+        horseNames.add("Wheat Flash"); horseNames.add("Crimson Cape"); 	horseNames.add("Blonde Jack");
+        horseNames.add("Brown Fur");	horseNames.add("Beige Pike");		horseNames.add("Lavender Sky");
+        horseNames.add("Garnet Goo");	horseNames.add("Fuscha Dragon");	horseNames.add("Neon Ice");
+        horseNames.add("Coral Brick"); horseNames.add("Magenta Magic");	horseNames.add("Purple Titan");
+        horseNames.add("Olive Pizza"); horseNames.add("Cyan Wave");		horseNames.add("Honeydew Flow");
+        
+        String horseName = horseNames.get(horseCtr);
+        
+        return horseName;
+    }
+    
+    public static String getBattleCry(int horseCtr){
+    	
+    	
+    	warCry.add("Bold win!");  	warCry.add("Take that!");    	warCry.add("Eat my dust!");
+    	warCry.add("Triumphant!");	warCry.add("High Ho!");    	warCry.add("As expected!");
+    	warCry.add("Dashing!");   	warCry.add("Victorious!");   	warCry.add("Predictable!");
+    	warCry.add("Peasants!"); 	warCry.add("For the win!");  	warCry.add("Suhweet!");
+    	warCry.add("Victory!");   	warCry.add("Easy Peasy!");		warCry.add("Effortless!");
+    	warCry.add("Amazing!");   	warCry.add("Undoubtedly!");  	warCry.add("Greatest!");
+    	warCry.add("Champion!");  	warCry.add("Nice race!");    	warCry.add("Imaginable!");
+    	warCry.add("Superb Qty!"); warCry.add("Onwards!");    	warCry.add("Give up!");
+    	warCry.add("For glory!");	warCry.add("Sore losers!"); 	warCry.add("Impeccable!");
+    	warCry.add("Splendid!");  	warCry.add("Record beaten!");	warCry.add("Another round!");
+	
+		String horseWarCry = warCry.get(horseCtr);
+		
+		return horseWarCry;    	
+    }	
+}
